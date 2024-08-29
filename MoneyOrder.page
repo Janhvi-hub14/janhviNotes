@@ -47,6 +47,7 @@ class MoneyOrderPage extends BaseClass {
         lnkAmountEnter1(wait: true){ $(By.xpath('//input[@id="input-mo-field-1"]'))}
         lnkAmountEnter2(wait: true){ $(By.xpath('//input[@id="input-mo-field-2"]'))}
         lnkAmountEnter3(wait: true){ $(By.xpath('//input[@id="input-mo-field-3"]'))}
+        lnkdelete3(wait: true){$(By.xpath('//a[@id="moDelete_anchor"]'))}
 //        AddNewReceiverInfo(wait: true) { $(By.xpath("//button[@id='add_customer_information']"))}
 //        ClickOnLookItUp(wait: true) { $(By.xpath("//button[@id='customer_lookup_search']"))}
 //        ClickOnRegisterButton(wait: true) { $(By.xpath("//button[@id=\"quick-resend-sender-edit-register-btn\"]"))}
@@ -390,7 +391,6 @@ class MoneyOrderPage extends BaseClass {
 
     @Step("User prints the Multiple MO with Using Customer Details")
     public void printMultipleMO(String sendAmount,String sendAmount2,String sendAmount3){
-
         JPGScreenshot("Before entering details for printing multiple MOs")
         sleep 2000
         waitFor {lnkAmountEnter1.displayed}
@@ -399,12 +399,26 @@ class MoneyOrderPage extends BaseClass {
         lnkAmountEnter2.value(sendAmount2+ Keys.TAB)
         waitFor {lnkAmountEnter3.displayed}
         lnkAmountEnter3.value(sendAmount3+ Keys.TAB)
+        waitFor {lnkAmountEnter3.displayed}
         sleep(1000)
+
         lnkPrintBtn.click()
         writeTextToReport("Amount entered in Multiple MO 1: ",sendAmount)
         writeTextToReport("Amount entered in Multiple MO 2: ",sendAmount2)
         writeTextToReport("Amount entered in Multiple MO 3: ",sendAmount3)
     }
+    @Step("User Delete the 3rd Money Order ")
+    public void eletethirdMO()
+    {
+        JPGScreenshot("Before deleting the 3rd Money Order")
+        sleep(1000)
+        waifor{ lnkdelete3.displayed}
+        lnkdelete3.click()
+        JPGScreenshot("After deleting the 3rd Money Order")
+        sleep 2000
+        writeTextToReport("Third Money Order Deleted Succesfully ")
+    }
+
 
     @Step("User Validate the Roports from the UI for given Date and Time")
     public void reportsDateAndTime(){
