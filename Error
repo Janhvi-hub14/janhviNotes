@@ -1,27 +1,18 @@
-org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <span class="SideNav_menuLabel__TcmBC SideNav_textWrap__SKxp0">...</span> is not clickable at point (152, 155). Other element would receive the click: <div tabindex="0" style="background-color: var(--color-dark03); display: flex; align-items: center; justify-content: center; width: 100%; min-height: 100%;">...</div>
-  (Session info: chrome=128.0.6613.113)
-Build info: version: '4.8.3', revision: 'e5e76298c3'
-System info: os.name: 'Windows Server 2016', os.arch: 'amd64', os.version: '10.0', java.version: '11.0.24'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Command: [6ee63081c1052d24dc375903b4d910e9, clickElement {id=f.70C11275E57348D519C3B6C0EA3382DB.d.F0003CA36094DDA418A9435FD67A4741.e.107}]
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 128.0.6613.113, chrome: {chromedriverVersion: 128.0.6613.84 (606aa55c7d68..., userDataDir: D:\Users\W0021139\AppData\L...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:50959}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: WINDOWS, proxy: Proxy(), se:cdp: ws://localhost:50959/devtoo..., se:cdpVersion: 128.0.6613.113, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Element: [[ChromeDriver: chrome on WINDOWS (6ee63081c1052d24dc375903b4d910e9)] -> xpath: //a[@id="sidenav_money order"]//span]
-Session ID: 6ee63081c1052d24dc375903b4d910e9
+  @Step("User prints the Multiple MO with Using Customer Details")
+    public void printMultipleMO(String sendAmount,String sendAmount2,String sendAmount3){
+        JPGScreenshot("Before entering details for printing multiple MOs")
+        sleep 2000
+        waitFor {lnkAmountEnter1.displayed}
+        lnkAmountEnter1.value(sendAmount+ Keys.TAB)
+        waitFor {lnkAmountEnter2.displayed}
+        lnkAmountEnter2.value(sendAmount2+ Keys.TAB)
+        waitFor {lnkAmountEnter3.displayed}
+        lnkAmountEnter3.value(sendAmount3+ Keys.TAB)
+        waitFor {lnkAmountEnter3.displayed}
+        sleep(1000)
 
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:200)
-	at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:133)
-	at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:53)
-	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:193)
-	at org.openqa.selenium.remote.service.DriverCommandExecutor.invokeExecute(DriverCommandExecutor.java:183)
-	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:158)
-	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:543)
-	at org.openqa.selenium.remote.RemoteWebElement.execute(RemoteWebElement.java:257)
-	at org.openqa.selenium.remote.RemoteWebElement.click(RemoteWebElement.java:78)
-	at geb.navigator.NonEmptyNavigator.click(NonEmptyNavigator.groovy:432)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at geb.content.TemplateDerivedPageContent.click(TemplateDerivedPageContent.groovy:82)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at pageobjects.MoneyOrderPage.selectMoneyOrderAmount(MoneyOrderPage.groovy:176)
-	at spec.RMO_Automation_Regression.TC001_RMO_Verfiy_User_login_successful.Verify the Printer Connectivity with the System(TC001_RMO_Verfiy_User_login_successful.groovy:61)
+
+        writeTextToReport("Amount entered in Multiple MO 1: ",sendAmount)
+        writeTextToReport("Amount entered in Multiple MO 2: ",sendAmount2)
+        writeTextToReport("Amount entered in Multiple MO 3: ",sendAmount3)
+    }
