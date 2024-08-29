@@ -1,0 +1,1140 @@
+package pageobjects
+
+import geb.waiting.WaitTimeoutException
+import org.apache.commons.lang.RandomStringUtils
+import org.junit.Assert
+import org.openqa.selenium.*
+import org.openqa.selenium.interactions.Actions
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.WebDriverWait
+import ru.yandex.qatools.allure.annotations.Step
+
+import java.awt.Robot
+import java.awt.event.InputEvent
+import java.awt.event.KeyEvent
+import java.security.Key
+import java.text.SimpleDateFormat
+import java.time.Duration
+
+class MoneyOrderPage extends BaseClass {
+
+   // def printerPopUpCounter=System.getProperty("printerPopUpCounter")
+    def static printerSelection = 0
+    def static printerSelection1 = 0
+    def static printerSelectionedge = 0
+    def static printerSelectionedge1 = 0
+    //    String url= driver.getCurrentUrl()
+
+    static at = {
+        if (driver.getCurrentUrl().contains("tablet-ui")) {
+            switchToFrame("rmodashboard")
+            println("Money order page loaded for 2.0")
+        }
+        else{
+            switchToFrame("RMO")
+            println("Money order page loaded for 1.0")
+        }
+        waitFor{ sendMoneyTitle.displayed }
+        println("In MoneyOrder Page")
+        sleep 1000
+        //driver.switchTo().defaultContent()
+
+    }
+
+    static content = {
+//        lnkPrintBtn(wait: true){ $(By.xpath('//button[@id="print-button"]')) }
+        sendMoneyTitle(wait: true) { $(By.xpath('//span[@id="motransactionsTitle"]')) }
+        lnkAmountEnter1(wait: true){ $(By.xpath('//input[@id="input-mo-field-1"]'))}
+        lnkAmountEnter2(wait: true){ $(By.xpath('//input[@id="input-mo-field-2"]'))}
+        lnkAmountEnter3(wait: true){ $(By.xpath('//input[@id="input-mo-field-3"]'))}
+//        AddNewReceiverInfo(wait: true) { $(By.xpath("//button[@id='add_customer_information']"))}
+//        ClickOnLookItUp(wait: true) { $(By.xpath("//button[@id='customer_lookup_search']"))}
+//        ClickOnRegisterButton(wait: true) { $(By.xpath("//button[@id=\"quick-resend-sender-edit-register-btn\"]"))}
+        vendorPaymentBtnSideBar(wait: true){ $(By.xpath('//a[@id="sidenav_vendor payment"]'))}
+        venderNameField(wait: true){ $(By.xpath('//input[@id="input_vendor-0"]'))}
+        printBtnVendorPage(wait: true ){ $(By.xpath('//button[@id="print"]'))}
+        addressline1(wait: true ){ $(By.xpath("//input[@id='input_Address-addressLine1']"))}
+//        txtContactNUm(wait: true){ $(By.xpath("//input[@id='input_ContactNumber-number']"))}
+//        txtFirstName(wait: true){ $(By.xpath("//input[@id='input_Name-first']"))}
+//        txtLastName(wait: true ){ $(By.xpath(" //input[@id='input_Name-last']"))}
+//        txtDateOfBirth(wait: true ){ $(By.xpath("//input[@id='input_id-dateOfBirth']"))}
+//        primaryIDEle(wait: true){ $(By.xpath("(//input[@id='input-null_docType'])[1]"))}
+//        secondaryIDEle(wait: true){ $(By.xpath("(//input[@id='input-null_docType'])[2]"))}
+        passportNumEle(wait: true ){ $(By.xpath("(//input[@id='input_PASSPORT_docNumber'])[1]"))}
+        foreignPassportEle(wait: true ){ $(By.xpath("(//input[@id='input_PASSPORT_docNumber'])[2]"))}
+//        txtPostalCode(wait: true ){ $(By.xpath("//input[@id='input_Address-postalCode']"))}
+//        Chbx_AgentConfirm(wait: true ){ $(By.xpath("//input[@id='agent-confirmation']"))}
+//        primaryID_Issuer(wait: true ){ $(By.xpath("(//input[@id='input-PASSPORT_issuer'])[1]"))}
+//        secondaryId_Issuer(wait: true ){ $(By.xpath("(//input[@id='input-PASSPORT_issuer'])[2]"))}
+        printerMngBtnSideBar(wait: true){ $(By.xpath('//a[@id="sidenav_printer management"]'))}
+        showPrinterTillesMoreInfoBtn(wait: true){ $(By.xpath('//a[@id="printer_tallies_anchor"]'))}
+        clickOnContainer(wait: true){ $(By.xpath('//div[@class="d-flex flex-column d-pad-xs"]'))}
+        lnkClickMoneyOrderSideBar(wait: true){ $(By.xpath('//a[@id="sidenav_money order"]//span'))}
+        clickOkafterPrintMO(wait: true){ $(By.xpath('//button[@id="ok"]'))}
+        lnkReturnMainPageAfterMO(wait: true){ $(By.xpath('//a[@id="returnToMoBtn_anchor"]'))}
+        lnkClickEncashSideBar(wait: true){ $(By.xpath('//a[@id="sidenav_encashment"]'))}
+        lnkEnterSerialNo(wait: true){ $(By.xpath('//input[@id="input_serial-number"]'))}
+        lnkEnterAmountOnEncash(wait: true){ $(By.xpath('//input[@id="input-input-amount"]'))}
+        lnkEnterAgentSellingNo(wait: true){ $(By.xpath('//input[@id="input_agent-number"]'))}
+        lnkSearchBtnEncash(wait: true){ $(By.xpath('//button[@id="search"]'))}
+        lnkVerifyStatusBtnSideBar(wait: true){ $(By.xpath('//a[@id="sidenav_status inquiry"]'))}
+        lnkEnterSerialNoVerifyStatus(wait: true){ $(By.xpath('//input[@id="input_status-serial-number"]'))}
+        lnkEnterAmountVerifyStatus(wait: true){ $(By.xpath('//input[@id="input-status-input-amount"]'))}
+        lnkEnterAgentSellingNoVerifyStatus(wait: true){ $(By.xpath('//input[@id="input_status-selling-agent-number"]'))}
+        lnkSearchBtnVerifyStatus(wait: true){ $(By.xpath('//button[@id="status-search-btn"]'))}
+        lnkClickVoidSideBar(wait: true){ $(By.xpath('//a[@id="sidenav_void"]'))}
+        lnkEnterSerialNoVoidTab(wait: true){ $(By.xpath('//input[@id="input_serial-number"]'))}
+        lnkEnterAmountVoidTab(wait: true){ $(By.xpath('//input[@id="input-input-amount"]'))}
+        lnkSearchBtnVoidTab(wait: true){$(By.xpath('//button[@id="search"]'))}
+        lnkCaptureSerialNoAtPrintMOPage(wait: true){$(By.xpath('//h3[contains(@class,\'SummaryItemCard_SummaryItemCardSerialNumber\')]'))}
+        lnkCaptureAmountAtPrintMOPage(wait: true){$(By.xpath('//h3[contains(@class,\'SummaryItemCard_SummaryItemCardAmount\')]'))}
+        lnkClickVendorButtonToEnterManually(wait: true){$(By.xpath('//a[@id="add-vendor-btn_anchor"]'))}
+        lnkSelectVendorOption(wait: true){$(By.xpath('//a[@id="add-vendor-btn_anchor"]'))}
+        lnkDisplayNoOfMOsAvaible(wait: true){$(By.xpath('//span[@class=\'font-ls-01\']/div/text()'))}
+        lnkAutoriseButtonEncash(wait: true){$(By.xpath('//button[@id="authorize"]'))}
+        lnkStatusAfterEncash(wait: true){$(By.xpath('//h1[contains(@class,\'StatusDetails_status\')]'))}
+        lnkOkBtnAfterEncash(wait: true){$(By.xpath('//button[@id="ok"]'))}
+        lnkRefreshBtnFetchMO(wait: true){$(By.xpath('//button[@id="printer-modal-submit-btn"] | //span[@class=\'font-ls-01\']/div/div'))}
+        lnkRefreshIcnFetchMO(wait: true){$(By.xpath('//span[@class=\'font-ls-01\']/div/div'))}
+        lnkReportBtnSideBar(wait: true){$(By.xpath('//a[@id="sidenav_reports"]'))}
+        lnkReportDateFromInput(wait: true){$(By.xpath('//input[@id="input_transaction-log-fromDate-textField"]'))}
+        lnkReportDateToInput(wait: true){$(By.xpath('//input[@id="input_transaction-log-toDate-textField"]'))}
+        lnkDateRangeBtnReportsTab(wait: true){$(By.xpath('//button[@id="dateRange"]'))}
+        lnkRefreshBtnToCntPrinterVendorPage(wait: true){$(By.xpath('//div[contains(@class,\'VendorPayment_remainingChequeContainer\')]/svg'))}
+        lnkVerifySerialNoAfterPrintVendorPage(wait: true){$(By.xpath('//h3[contains(@class,\'printedCheck_PrintedCheckSerialNumber\')]'))}
+        lnkVerifyAmountAfterPrintVendorPage(wait: true){$(By.xpath('//h3[contains(@class,\'printedCheck_PrintedCheckAmount\')]'))}
+        lnkFromDateHH(wait: true){$(By.xpath('(//span[@id="dropdown_icon_select-transaction-log-fromDate-textField"])[1]'))}
+        lnkFromDateMM(wait: true){$(By.xpath('(//span[@id="dropdown_icon_select-transaction-log-fromDate-textField"])[2]'))}
+        lnkFromDateZone(wait: true){$(By.xpath('(//span[@id="dropdown_icon_select-transaction-log-fromDate-textField"])[3]'))}
+        lnkToDateHH(wait: true){$(By.xpath('(//span[@id="dropdown_icon_select-transaction-log-toDate-textField"])[1]'))}
+        lnkToDateMM(wait: true){$(By.xpath('(//span[@id="dropdown_icon_select-transaction-log-toDate-textField"])[2]'))}
+        lnkToDateZone(wait: true){$(By.xpath('(//span[@id="dropdown_icon_select-transaction-log-toDate-textField"])[3]'))}
+        lnkTotalAmountMOprinted(wait: true){$(By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[1]'))}
+        lnkTotalAmountGiftCertified(wait: true){$(By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[2]'))}
+        lnkTotalAmountMOprintedVendor(wait: true){$(By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[3]'))}
+        lnkTotalAmountVoidPrinted(wait: true){$(By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[4]'))}
+        lnkTotalAmountFees(wait: true){$(By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[5]'))}
+        lnkTotalAmountMOEncashed(wait: true){$(By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[6]'))}
+        lnkSearchBtnReportsTab(wait: true){$(By.xpath('//button[@id="btn_transactionLog_date_search"] | //button[@id="apply"]'))}
+        lnkRunTestBtnForPrinterConnectivity(wait: true){$(By.xpath('//a[@id="printer_status_anchor"]'))}
+        lnkPrinterConnectivityTestMsg(wait: true){$(By.xpath('//p[contains(@class,\'AuthorizationModal_subTitle\')]'))}
+        lnkOkBtnAfterConnectivityTest(wait: true){$(By.xpath('//button[@id="yes"]'))}
+        lnkExportReportBtn(wait: true){$(By.xpath('//div[@id="reports-transaction-export-pdf"]/span'))}
+        lnkExportReportExcel(wait: true){$(By.xpath('//div[@id="reports-download-excel"]'))}
+        lnkExportReportCSV(wait: true){$(By.xpath('//div[@id="reports-download-csv"]'))}
+        lnkExportReportPDF(wait: true){$(By.xpath('//div[@id="reports-download-pdf"]'))}
+        titleCustomerLookUp(wait: true){ $(By.xpath("//*[@id='label_customer_lookup_search_title']"))}
+        lnkPrintBtn(wait: true){ $(By.xpath('//button[@id="print-button"]')) }
+        AddNewReceiverInfo(wait: true) { $(By.xpath("//button[@id='add_customer_information']"))}
+        customerContactNumber(wait: true) { $(By.xpath("//input[@id='input_customer_lookup_contact_number-number']"))}
+        ClickOnLookItUp(wait: true) { $(By.xpath("//button[@id='customer_lookup_search']"))}
+        ClickOnRegisterButton(wait: true) { $(By.xpath("//button[@id='quick-resend-sender-edit-register-btn']"))}
+        addressline(wait: true ){ $(By.xpath("//input[@id='input_Address-addressLine1']"))}
+        txtContactNUm(wait: true){ $(By.xpath("//input[@id='input_ContactNumber-number']"))}
+        txtFirstName(wait: true){ $(By.xpath("//input[@id='input_Name-first']"))}
+        txtLastName(wait: true ){ $(By.xpath(" //input[@id='input_Name-last']"))}
+        txtDateOfBirth(wait: true ){ $(By.xpath("//input[@id='input_id-dateOfBirth']"))}
+        primaryIDEle(wait: true){ $(By.xpath("(//input[@id='input-null_docType'])[1]"))}
+        secondaryIDEle(wait: true){ $(By.xpath("(//input[@id='input-null_docType'])[2]"))}
+        secondaryIDField(wait: true ){ $(By.xpath("(//input[@placeholder=\"ID number\"])[2]"))}
+        txtPostalCode(wait: true ){ $(By.xpath("//input[@id='input_Address-postalCode']"))}
+        Chbx_AgentConfirm(wait: true ){ $(By.xpath("//input[@id='agent-confirmation']"))}
+        primaryID_Issuer(wait: true ){ $(By.xpath("(//input[@id='input-PASSPORT_issuer'])[1]"))}
+        secondaryId_Issuer(wait: true ){ $(By.xpath("(//input[@id='input-PASSPORT_issuer'])[2]"))}
+        primaryIDField(wait: true) { $(By.xpath("//input[@placeholder=\"ID number\"]"))}
+        inputCity(wait: true) { $(By.xpath("//input[@id='input_Address-city']"))}
+        inputState(wait: true) { $(By.xpath(""))}
+        lookUpSelectFirstCustomer(wait: true){$(By.xpath('(//div[@id="customer_lookup_row"])[1]'))}
+        iptFromTime(wait: true){$(By.xpath('//input[@id="fromTimer"]'))}
+        iptToTime(wait: true){$(By.xpath('//input[@id="toTimer"]'))}
+        printerToggleEnableMockPrinting(wait: true){$(By.xpath('//span[@id="switch_span_mock_print"]'))}
+    }
+
+    //@Step("Retrieve the data from KYCdetails.json file")
+    Map retrieveDataFromKYCJson(String senderCountryCode) {
+        Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/SMO/" + "KYCLookup.json")
+        Map resultSet = jsonResult.get(senderCountryCode)
+        return resultSet
+    }
+    @Step("User going to click on add customer information")
+    public void clickAddCustomerInfo(){
+        sleep 10000
+        waitFor {AddNewReceiverInfo.displayed}
+        WebElement addNewReceiverInfoJS = driver.findElement(By.xpath("//button[@id='add_customer_information']"))
+        JavascriptExecutor js = (JavascriptExecutor) driver
+        js.executeScript("arguments[0].click();", addNewReceiverInfoJS)
+//        AddNewReceiverInfo.click()
+    }
+
+    @Step("Agent Select the Money Order page Enter the Amount and Print the MO without using Customer Details")
+    public ArrayList<String> selectMoneyOrderAmount(String sendAmount){
+//        sleep 1000
+//        selectPrinterFromPopUp()
+        sleep(15000)
+
+        lnkClickMoneyOrderSideBar.click()
+        sleep 5000
+        takeScreenshotString("After navigating to money order tab")
+        WebElement MOLoadedInVault = driver.findElement(By.xpath('//span[@class=\'font-ls-01\']/div'))
+        String NoOfMOLoadedInVault = MOLoadedInVault.getText()
+        writeTextToReport("\n No. of MO Loaded In Vault: ",NoOfMOLoadedInVault)
+
+        lnkAmountEnter1.value(sendAmount + Keys.TAB)
+        sleep 2000
+      //  lnkAmountEnter2.click()
+        sleep 1000
+        takeScreenshotString("Before Clicking on print button details filled")
+        lnkPrintBtn.click()
+        sleep 40000
+
+        saveScreenshotPNG("After printing Money order capturing details")
+
+        ArrayList<String> serialNumbers = new ArrayList<String>()
+        List<WebElement> entireSerialNo = driver.findElements(By.xpath("//h3[contains(@class,'SummaryItemCard_SummaryItemCardSerialNumber')]"))
+        List<WebElement> entireAmount = driver.findElements(By.xpath("//h3[contains(@class,'SummaryItemCard_SummaryItemCardAmount')]"))
+        int totalSerialNo = entireSerialNo.size()
+        int totalAmountNo = entireAmount.size()
+        println("Total serial numbers: " + totalSerialNo)
+        println("Total amount fields: " + totalAmountNo)
+        for (int i=0;i<totalSerialNo;i++){
+            String serialNo = entireSerialNo.get(i).getText()
+            String eachAmount = entireAmount.get(i).getText()
+            serialNumbers.add(serialNo)
+            writeTextToReport("Serial NO. Of MO printed " + String.valueOf(i+1)+ " :",serialNo)
+            writeTextToReport("Amount at print MO : " + String.valueOf(i+1)+ " :",eachAmount)
+        }
+
+        lnkReturnMainPageAfterMO.click()
+        return serialNumbers
+
+    }
+
+    @Step("User Generating MO using Vendor Payment")
+    public void vendorPaymentMO(String vendorName,String sendAmount){
+
+        sleep 15000
+        int amount=sendAmount.toInteger()
+        waitFor { vendorPaymentBtnSideBar.displayed }
+        vendorPaymentBtnSideBar.click()
+//        sleep 1000
+        sleep 1000
+//        lnkRefreshBtnToCntPrinterVendorPage.click()
+//        sleep 2000
+//        selectPrinterFromPopUp()
+//        sleep(20000)
+
+        saveScreenshotPNG("Before printing the MO for the Vendor payment sale")
+        venderNameField.value(vendorName)
+        lnkAmountEnter1.value(sendAmount + Keys.TAB)
+        sleep 2000
+        printBtnVendorPage.click()
+        sleep 3000
+        if(amount>=3000){
+            printBtnVendorPage.click()
+        }
+        sleep 25000
+        takeScreenshotString("After printing MO for Vendor payment sale")
+//        waitFor {lnkVerifySerialNoAfterPrintVendorPage.displayed}
+        WebElement serialNoVendor = driver.findElement(By.xpath("//h3[contains(@class,'printedCheck_PrintedCheckSerialNumber')]"))
+        String SerialNoPrintMOVendor = serialNoVendor.getText()
+//        waitFor {lnkCaptureAmountAtPrintMOPage.displayed}
+        WebElement AmountLoadedPrintMOVendor = driver.findElement(By.xpath("//h3[contains(@class,'printedCheck_PrintedCheckAmount')]"))
+        String AmountAtPrintMOVendor = AmountLoadedPrintMOVendor.getText()
+
+        writeTextToReport("Serial Of MO printed: ",SerialNoPrintMOVendor)
+        writeTextToReport("Amount at print MO : ",AmountAtPrintMOVendor)
+
+    }
+
+    public static int generateTwoDigitRandomNumber() {
+        return 10 + new Random().nextInt(90)
+    }
+
+
+    @Step("User Checking MO avaliable in vault")
+    public void printerManagerCheckVault(){
+        sleep 3000
+        waitFor { printerMngBtnSideBar.displayed }
+        printerMngBtnSideBar.click()
+        sleep 3000
+        printerMngBtnSideBar << Keys.ENTER
+        sleep 3000
+        waitFor { showPrinterTillesMoreInfoBtn.displayed }
+        showPrinterTillesMoreInfoBtn.click()
+        sleep 20000
+        Keys.ENTER
+        WebElement MOLoadedField = driver.findElement(By.xpath('(//span[@class=\'font-bc-03-regular\'])[22]'))
+        String MOTextNo = MOLoadedField.getText()
+        writeTextToReport("Number of MO loaded: ", MOTextNo)
+    }
+
+    @Step("User EnCashing the MO after MO gets printer")
+    public void encashMoneyOrder(String sendAmount, ArrayList<String> allSerialNumbers){
+//        sleep 3000
+//        waitFor {clickOkafterPrintMO.displayed}
+//        clickOkafterPrintMO.click()
+//        sleep 2000
+        def a=""
+        Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+        Map Details = jsonResult.get("customerInfo")
+        String enCashAgentSellingNo = Details.get("enCashAgentSellingNo")
+        for(int i=0;i<allSerialNumbers.size();i++) {
+            waitFor {lnkClickEncashSideBar.displayed}
+            lnkClickEncashSideBar.click()
+            sleep 1000
+            writeTextToReport("User navigated to encashment tab",a)
+            takeScreenshotString("After Navigating to the encashment tab")
+            String SerialNoMO = allSerialNumbers.get(i)
+            lnkEnterSerialNo.value(SerialNoMO)
+            sleep 1000
+            lnkEnterAmountOnEncash.value(sendAmount)
+            sleep 1000
+            lnkEnterAgentSellingNo.value(enCashAgentSellingNo)
+            waitFor { lnkSearchBtnEncash.displayed }
+            lnkSearchBtnEncash.click()
+            takeScreenshotString("After clicking search button for MO " + String.valueOf(i+1) + " to EnCash ")
+            sleep 2000
+            lnkAutoriseButtonEncash.click()
+            sleep 2000
+            lnkOkBtnAfterEncash.click()
+            takeScreenshotString("After authorization of MO " + String.valueOf(i+1))
+            WebElement MOStatusAfterEncash = driver.findElement(By.xpath("//h1[contains(@class,'StatusDetails_status')]"))
+            String StatusAfterEncash = MOStatusAfterEncash.getText()
+            WebElement MOAuthorizationCodeEncash = driver.findElement(By.xpath("//h1[contains(@class,'VoidDetails_transactionInfo')]"))
+            String AuthorizationCodeEncash = MOAuthorizationCodeEncash.getText()
+
+            writeTextToReport("Status of MO " + String.valueOf(i+1) + " after EnCash : ", StatusAfterEncash)
+            writeTextToReport("Authorization code of MO " + String.valueOf(i+1) + " after EnCash : ", AuthorizationCodeEncash)
+            writeTextToReport("Money Order encashment successful",a)
+        }
+
+    }
+
+    @Step("User Verifies the Status of MO")
+    public void verifyStatusInquiry(String SerialNo, String Amount){
+        sleep 2000
+        def b=""
+        waitFor {lnkVerifyStatusBtnSideBar.displayed}
+        lnkVerifyStatusBtnSideBar.click()
+        writeTextToReport("User navigated to verify status tab",b)
+        takeScreenshotString("After navigating to verify status tab")
+        Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+        Map Details = jsonResult.get("customerInfo")
+        String statusVerifySerialNo = Details.get("statusVerifySerialNo")
+        lnkEnterSerialNoVerifyStatus.value(statusVerifySerialNo)
+        String statusVerifyAmount = Details.get("statusVerifyAmount")
+        lnkEnterAmountVerifyStatus.value(statusVerifyAmount)
+        String statusVerifyAgentSellingNo = Details.get("statusVerifyAgentSellingNo")
+        lnkEnterAgentSellingNoVerifyStatus.value(statusVerifyAgentSellingNo)
+        waitFor {lnkSearchBtnVerifyStatus.displayed}
+        lnkSearchBtnVerifyStatus.click()
+        takeScreenshotString("After entering details for status enquiry")
+        sleep 2000
+//        waitFor {lnkStatusAfterEncash.displayed}
+        WebElement MOStatus = driver.findElement(By.xpath("//h1[contains(@class,'StatusDetails_status')]"))
+        String StatusInquiry = MOStatus.getText()
+
+
+        writeTextToReport("Status of MO : ", StatusInquiry)
+    }
+
+    @Step("User Verifies the Status of MO after Customer Registration")
+    public void verifyStsInqAftCustomerRegFlow(String Amount,ArrayList<String> allSerialNumbers){
+        sleep 2000
+        Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+        Map Detail = jsonResult.get("customerInfo")
+        String statusVerifyAgentSellingNo = Detail.get("statusVerifyAgentSellingNo")
+        def c=""
+        for(int i=0;i<allSerialNumbers.size();i++) {
+            waitFor {lnkVerifyStatusBtnSideBar.displayed}
+            lnkVerifyStatusBtnSideBar.click()
+            writeTextToReport("User navigated to verify status tab",c)
+            takeScreenshotString("After navigating to verify status tab")
+            sleep 1000
+            String SerialNoMO = allSerialNumbers.get(i)
+            sleep 3000
+            lnkEnterSerialNoVerifyStatus.value(SerialNoMO)
+            sleep 1000
+            lnkEnterAmountVerifyStatus.value(Amount)
+            sleep 1000
+            lnkEnterAgentSellingNoVerifyStatus.value(statusVerifyAgentSellingNo)
+            waitFor {lnkSearchBtnVerifyStatus.displayed}
+            lnkSearchBtnVerifyStatus.click()
+            takeScreenshotString("After entering details of MO " + String.valueOf(i+1) + " to verify Status ")
+            sleep 2000
+            WebElement MOStatus = driver.findElement(By.xpath("//h1[contains(@class,'StatusDetails_status')]"))
+            String StatusInquiry = MOStatus.getText()
+            writeTextToReport("Status of MO " + String.valueOf(i+1) + " : " ,StatusInquiry)
+
+        }
+        sleep 2000
+//        waitFor {lnkStatusAfterEncash.displayed}
+
+    }
+    @Step("User voids the MO generated")
+    public void voidMOAfterPrint(){
+        waitFor {lnkClickVoidSideBar.displayed}
+        lnkClickVoidSideBar.click()
+        JPGScreenshot("Before entering details to VOID Money order")
+        Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+        Map Details = jsonResult.get("customerInfo")
+        sleep 1000
+        String voidSerialNo = Details.get("voidSerialNo")
+        lnkEnterSerialNoVoidTab.value(voidSerialNo)
+        String voidEnterAmount = Details.get("voidEnterAmount")
+        lnkEnterAmountVoidTab.value(voidEnterAmount)
+        waitFor {lnkSearchBtnVoidTab.displayed}
+        lnkSearchBtnVoidTab.click()
+        JPGScreenshot("After printing VOID for MO")
+    }
+
+    @Step("User prints the Multiple MO with Using Customer Details")
+    public void printMultipleMO(String sendAmount,String sendAmount2,String sendAmount3){
+
+        JPGScreenshot("Before entering details for printing multiple MOs")
+        sleep 2000
+        waitFor {lnkAmountEnter1.displayed}
+        lnkAmountEnter1.value(sendAmount+ Keys.TAB)
+        waitFor {lnkAmountEnter2.displayed}
+        lnkAmountEnter2.value(sendAmount2+ Keys.TAB)
+        waitFor {lnkAmountEnter3.displayed}
+        lnkAmountEnter3.value(sendAmount3+ Keys.TAB)
+        sleep(1000)
+        lnkPrintBtn.click()
+        writeTextToReport("Amount entered in Multiple MO 1: ",sendAmount)
+        writeTextToReport("Amount entered in Multiple MO 2: ",sendAmount2)
+        writeTextToReport("Amount entered in Multiple MO 3: ",sendAmount3)
+    }
+
+    @Step("User Validate the Roports from the UI for given Date and Time")
+    public void reportsDateAndTime(){
+        sleep 1000
+        Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+        Map Details = jsonResult.get("customerInfo")
+        def e=""
+        def fromHH= Details.get("reportFromHH")
+        def fromMM= Details.get("reportFromMM")
+        Boolean fromZone= Details.get("reportFromZone")
+        def toHH= Details.get("reportToHH")
+        def toMM= Details.get("reportToMM")
+        Boolean toZone= Details.get("reportToZone")
+        JavascriptExecutor js = (JavascriptExecutor) driver
+
+
+        waitFor {lnkReportBtnSideBar.displayed}
+        lnkReportBtnSideBar.click()
+        sleep 2000
+        writeTextToReport("User navigated to reports tab",e)
+        takeScreenshotString("After navigating to the reports tab")
+        waitFor {lnkDateRangeBtnReportsTab.displayed}
+        lnkDateRangeBtnReportsTab.click()
+        sleep 1000
+        saveScreenshotPNG("After clicking on date range button")
+
+        String reportFromDate = Details.get("reportFromDate")
+        WebElement reportDateFrom = driver.findElement (By.xpath('//input[@id="fromDate"] | //input[@id="startDate"]'))
+        reportDateFrom.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE))
+        reportDateFrom.sendKeys(reportFromDate+ Keys.TAB)
+        writeTextToReport("Date from the report generated : ", reportFromDate)
+
+        sleep 1000
+        writeTextToReport("Date to the report generated : ", calculateTodayDate())
+
+//        String reportToDate = Details.get("reportToDate")
+//        WebElement reportDateTo = driver.findElement (By.xpath('//input[@id="toDate"] | //input[@id="endDate"]'))
+//        reportDateTo.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE))
+//        reportDateTo.sendKeys(reportToDate+ Keys.TAB)
+//        writeTextToReport("Date from the report generated : ", reportToDate)
+
+//        sleep 1000
+//        String reportFromTime = "06:10 AM"//"Details.get("reportFromTime")"
+
+//        iptFromTime.click()
+//        sleep 2000
+//        WebElement reportTimeFrom  = driver.findElement (By.xpath("//li[contains(text(),'5:40 AM')]"))
+//        js.executeScript("arguments[0].click();", reportTimeFrom)
+
+
+//        reportTimeFrom.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE))
+//        iptFromTime.value(reportFromTime)
+//        writeTextToReport("Date from the report generated : ", reportFromTime)
+
+//        sleep 1000
+//        String reportToTime = "11:50 PM"//Details.get("reportToTime")
+//        WebElement reportTimeTo = driver.findElement (By.xpath('//input[@id="toTimer"]'))
+//        iptToTime.click()
+//        sleep 2000
+//        WebElement reportTimeTo  = driver.findElement (By.xpath("//li[contains(text(),'11:50 PM')]"))
+//        js.executeScript("arguments[0].click();", reportTimeTo)
+
+//        reportTimeTo.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE))
+//        iptToTime.value(reportToTime)
+//        writeTextToReport("Date from the report generated : ", reportToTime)
+
+//        lnkFromDateHH.click()
+//        WebElement fromDateHH = driver.findElement (By.xpath("//div[@id='react-select-transaction-log-fromDate-textField-option-" + fromHH-1 + "']"))
+//        fromDateHH.click()
+//
+//        lnkFromDateMM.click()
+//        sleep 1000
+//        WebElement fromDateMM = driver.findElement (By.xpath("//div[@id='react-select-transaction-log-fromDate-textField-option-" + fromMM-1 + "']"))
+//        fromDateMM.click()
+//
+//        lnkFromDateZone.click()
+//        if(fromZone){
+//            WebElement fromDateZone = driver.findElement (By.xpath("//div[@id='react-select-transaction-log-fromDate-textField-option-0']"))
+//            fromDateZone.click()
+//        }
+//        else {
+//            WebElement fromDateZone = driver.findElement (By.xpath("//div[@id='react-select-transaction-log-fromDate-textField-option-1']"))
+//            fromDateZone.click()
+//        }
+//
+//        lnkToDateHH.click()
+//        sleep 1000
+//        WebElement toDateHH = driver.findElement (By.xpath("//div[@id='react-select-transaction-log-toDate-textField-option-" + toHH-1 + "']"))
+//        toDateHH.click()
+//
+//        lnkToDateMM.click()
+//        sleep 1000
+//        WebElement toDateMM = driver.findElement (By.xpath("//div[@id='react-select-transaction-log-toDate-textField-option-" + toMM-1 + "']"))
+//        toDateMM.click()
+//
+//        lnkToDateZone.click()
+//        sleep 1000
+//        if(toZone){
+//            WebElement toDateZone = driver.findElement (By.xpath("//div[@id='react-select-transaction-log-toDate-textField-option-0']"))
+//            toDateZone.click()
+//        }
+//        else {
+//            WebElement toDateZone = driver.findElement (By.xpath("//div[@id='react-select-transaction-log-toDate-textField-option-1']"))
+//            toDateZone.click()
+//        }
+
+        lnkSearchBtnReportsTab.click()
+        sleep 3000
+
+        WebElement totalAmountMOprinted = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[1]'))
+        String totalAmountReport = totalAmountMOprinted.getText()
+
+        WebElement totalAmountGiftCertified = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[2]'))
+        String totalAmountGifts = totalAmountGiftCertified.getText()
+
+        WebElement totalAmountMOprintedVendor = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[3]'))
+        String totalAmountReportVendor = totalAmountMOprintedVendor.getText()
+
+        WebElement totalAmountMOsVoidPrinted = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[4]'))
+        String totalAmountMOVoided = totalAmountMOsVoidPrinted.getText()
+
+        WebElement totalAmountFeesCollected = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[5]'))
+        String totalAmountFees = totalAmountFeesCollected.getText()
+
+        WebElement totalAmountMOencashed = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[6]'))
+        String totalAmountReportEncash = totalAmountMOencashed.getText()
+
+        WebElement totalAmountActivityDone = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[7]'))
+        String totalAmountActivites = totalAmountActivityDone.getText()
+
+        writeTextToReport("Total Amount of Money order printed in date range :", totalAmountReport)
+        writeTextToReport("Total Amount of Gifts Certificates printed in date range :", totalAmountGifts)
+        writeTextToReport("Total Amount of Money order printed by vendors in date range :", totalAmountReportVendor)
+        writeTextToReport("Total Amount of Money order printed and voided in the date range :", totalAmountMOVoided)
+        writeTextToReport("Total Amount of Money orders fees collected in date range :", totalAmountFees)
+        writeTextToReport("Total Amount of Money order Encashed in date range :", totalAmountReportEncash)
+        writeTextToReport("Total Amount of Activity done :", totalAmountActivites)
+
+        takeScreenshotString("After getting the report for the given date and time")
+    }
+
+    @Step("User Validate the Report from UI and Export the Report")
+    public void reportsExportinTypes(String ReportType){
+        sleep 5000
+        Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+        Map Details = jsonResult.get("customerInfo")
+        def f=""
+        waitFor {lnkReportBtnSideBar.displayed}
+        lnkReportBtnSideBar.click()
+        sleep 2000
+        writeTextToReport("User navigated to reports tab",f)
+        takeScreenshotString("After navigating to the reports tab")
+        waitFor {lnkDateRangeBtnReportsTab.displayed}
+        lnkDateRangeBtnReportsTab.click()
+        sleep 1000
+        saveScreenshotPNG("After clicking on date range button")
+
+        String reportFromDate = Details.get("reportFromDate")
+        WebElement reportDateFrom = driver.findElement (By.xpath('//input[@id="fromDate"]  | //input[@id="startDate"]'))
+        reportDateFrom.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE))
+        reportDateFrom.sendKeys(reportFromDate+Keys.TAB)
+        writeTextToReport("Date from the report generated : ", reportFromDate)
+
+
+        sleep 2000
+        writeTextToReport("Date to the report generated : ", calculateTodayDate())
+//        String reportToDate = Details.get("reportToDate")
+//        WebElement reportDateTo = driver.findElement (By.xpath('//input[@id="toDate"] | //input[@id="endDate"]'))
+//        reportDateTo.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE))
+//        reportDateTo.sendKeys(reportToDate+ Keys.TAB)
+//
+//        writeTextToReport("Date to the report generated : ", reportToDate)
+
+        lnkSearchBtnReportsTab.click()
+        sleep 3000
+
+        WebElement totalAmountMOprinted = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[1]'))
+        String totalAmountReport = totalAmountMOprinted.getText()
+
+        WebElement totalAmountGiftCertified = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[2]'))
+        String totalAmountGifts = totalAmountGiftCertified.getText()
+
+        WebElement totalAmountMOprintedVendor = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[3]'))
+        String totalAmountReportVendor = totalAmountMOprintedVendor.getText()
+
+        WebElement totalAmountMOsVoidPrinted = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[4]'))
+        String totalAmountMOVoided = totalAmountMOsVoidPrinted.getText()
+
+        WebElement totalAmountFeesCollected = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[5]'))
+        String totalAmountFees = totalAmountFeesCollected.getText()
+
+        WebElement totalAmountMOencashed = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[6]'))
+        String totalAmountReportEncash = totalAmountMOencashed.getText()
+
+        WebElement totalAmountActivityDone = driver.findElement (By.xpath('(//div[contains(@class,\'TotalReportSummary_cardHeader\')])[7]'))
+        String totalAmountActivites = totalAmountActivityDone.getText()
+
+        writeTextToReport("Total Amount of Money order printed in date range :", totalAmountReport)
+        writeTextToReport("Total Amount of Gifts Certificates printed in date range :", totalAmountGifts)
+        writeTextToReport("Total Amount of Money order printed by vendors in date range :", totalAmountReportVendor)
+        writeTextToReport("Total Amount of Money order printed and voided in the date range :", totalAmountMOVoided)
+        writeTextToReport("Total Amount of Money orders fees collected in date range :", totalAmountFees)
+        writeTextToReport("Total Amount of Money order Encashed in date range :", totalAmountReportEncash)
+        writeTextToReport("Total Amount of Activity done :", totalAmountActivites)
+
+        sleep 3000
+        lnkExportReportBtn.click()
+
+        sleep 2000
+        switch(ReportType) {
+            case "excel":
+                lnkExportReportExcel.click()
+                break
+            case "csv":
+                lnkExportReportCSV.click()
+                break
+            case "pdf":
+                lnkExportReportPDF.click()
+                break
+            default:
+                lnkExportReportPDF.click()
+        }
+
+        Keys.ENTER
+        takeScreenshotString("After getting the report for the given date, also the exported copy")
+        writeTextToReport("Report exported successfully",f)
+    }
+
+    @Step("User Selects the Printer and connect it to UI in WUPOS 2.0")
+    public void selectPrinterFromPopUp(){
+
+//        saveScreenshotPNG("Before connecting the printer with system")
+        if(printerSelection==0) {
+            sleep 1000
+//            if(lnkRefreshBtnFetchMO)
+            lnkRefreshBtnFetchMO.click()
+//            else
+//                lnkRefreshIcnFetchMO.click()
+            sleep 2000
+            println("Thread Started for printer PopUp")
+            Thread.sleep 1000
+            Robot robo = new Robot()
+            robo.keyPress(KeyEvent.VK_TAB)
+            robo.keyRelease(KeyEvent.VK_TAB)
+            // robo.k
+            sleep 2000
+            robo.keyPress(KeyEvent.VK_UP)
+            robo.keyRelease(KeyEvent.VK_UP)
+            sleep 2000
+            robo.keyPress(KeyEvent.VK_TAB)
+            robo.keyRelease(KeyEvent.VK_TAB)
+            sleep 2000
+            robo.keyPress(KeyEvent.VK_TAB)
+            robo.keyRelease(KeyEvent.VK_TAB)
+            sleep 2000
+//                robo.keyPress(KeyEvent.VK_ENTER)
+//                sleep 2000
+//                robo.keyPress(KeyEvent.VK_ENTER)
+//                sleep 2000
+            robo.keyPress(KeyEvent.VK_ENTER)
+            robo.keyRelease(KeyEvent.VK_ENTER)
+//                Actions builder = new Actions(driver)
+//                builder.sendKeys(Keys.ENTER)
+
+            sleep 2000
+            println("Thread Done")
+            sleep 5000
+
+            printerSelection++
+
+        }
+        else
+            println("Already printer connected")
+        sleep 5000
+        takeScreenshotString("After printer is connected to system")
+    }
+
+    @Step("User Selects the Printer and connect it to UI in WUPOS 1.0")
+    public void selectPrinterFromPopUp1(){
+
+
+//        saveScreenshotPNG("Before connecting the printer with system")
+        if(printerSelection1==0) {
+            sleep 1000
+//            if(lnkRefreshBtnFetchMO)
+            lnkRefreshBtnFetchMO.click()
+//            else
+//                lnkRefreshIcnFetchMO.click()
+            sleep 2000
+            println("Thread Started for printer PopUp")
+            Thread.sleep 1000
+            Robot robo = new Robot()
+            robo.keyPress(KeyEvent.VK_TAB)
+            robo.keyRelease(KeyEvent.VK_TAB)
+            // robo.k
+            sleep 2000
+            robo.keyPress(KeyEvent.VK_UP)
+            robo.keyRelease(KeyEvent.VK_UP)
+            sleep 2000
+            robo.keyPress(KeyEvent.VK_TAB)
+            robo.keyRelease(KeyEvent.VK_TAB)
+            sleep 2000
+            robo.keyPress(KeyEvent.VK_TAB)
+            robo.keyRelease(KeyEvent.VK_TAB)
+            sleep 2000
+//                robo.keyPress(KeyEvent.VK_ENTER)
+//                sleep 2000
+//                robo.keyPress(KeyEvent.VK_ENTER)
+//                sleep 2000
+            robo.keyPress(KeyEvent.VK_ENTER)
+            robo.keyRelease(KeyEvent.VK_ENTER)
+//                Actions builder = new Actions(driver)
+//                builder.sendKeys(Keys.ENTER)
+
+            sleep 2000
+            println("Thread Done")
+            sleep 5000
+
+            printerSelection1++
+
+        }
+        else
+            println("Already printer connected")
+        sleep 5000
+        takeScreenshotString("After printer is connected to system")
+    }
+
+    @Step("User Selects the Printer and connect it to UI in WUPOS 2.0 on Edge browser")
+    public void selectPrinterFromPopUpEdge(){
+
+//        saveScreenshotPNG("Before connecting the printer with system")
+        if(printerSelectionedge==0) {
+            sleep 1000
+//            if(lnkRefreshBtnFetchMO)
+            lnkRefreshBtnFetchMO.click()
+//            else
+//                lnkRefreshIcnFetchMO.click()
+            sleep 2000
+            println("Thread Started for printer PopUp")
+            Thread.sleep 1000
+            Robot robo = new Robot()
+            robo.keyPress(KeyEvent.VK_TAB)
+            robo.keyRelease(KeyEvent.VK_TAB)
+            // robo.k
+            sleep 2000
+            robo.keyPress(KeyEvent.VK_UP)
+            robo.keyRelease(KeyEvent.VK_UP)
+            sleep 2000
+//            robo.keyPress(KeyEvent.VK_TAB)
+//            robo.keyRelease(KeyEvent.VK_TAB)
+            sleep 2000
+            robo.keyPress(KeyEvent.VK_TAB)
+            robo.keyRelease(KeyEvent.VK_TAB)
+            sleep 2000
+//                robo.keyPress(KeyEvent.VK_ENTER)
+//                sleep 2000
+//                robo.keyPress(KeyEvent.VK_ENTER)
+//                sleep 2000
+            robo.keyPress(KeyEvent.VK_ENTER)
+            robo.keyRelease(KeyEvent.VK_ENTER)
+//                Actions builder = new Actions(driver)
+//                builder.sendKeys(Keys.ENTER)
+
+            sleep 2000
+            println("Thread Done")
+            sleep 2000
+
+            printerSelectionedge++
+
+        }
+        else
+            println("Already printer connected")
+        sleep 5000
+        takeScreenshotString("After printer is connected to system")
+    }
+
+    @Step("User Selects the Printer and connect it to UI in WUPOS 1.0 on Edge bowser")
+    public void selectPrinterFromPopUpEdge1(){
+
+
+//        saveScreenshotPNG("Before connecting the printer with system")
+        if(printerSelectionedge1==0) {
+            sleep 1000
+//            if(lnkRefreshBtnFetchMO)
+            lnkRefreshBtnFetchMO.click()
+//            else
+//                lnkRefreshIcnFetchMO.click()
+            sleep 2000
+            println("Thread Started for printer PopUp")
+            Thread.sleep 1000
+            Robot robo = new Robot()
+            robo.keyPress(KeyEvent.VK_TAB)
+            robo.keyRelease(KeyEvent.VK_TAB)
+            // robo.k
+            sleep 2000
+            robo.keyPress(KeyEvent.VK_UP)
+            robo.keyRelease(KeyEvent.VK_UP)
+            sleep 2000
+//            robo.keyPress(KeyEvent.VK_TAB)
+//            robo.keyRelease(KeyEvent.VK_TAB)
+            sleep 2000
+            robo.keyPress(KeyEvent.VK_TAB)
+            robo.keyRelease(KeyEvent.VK_TAB)
+            sleep 2000
+//                robo.keyPress(KeyEvent.VK_ENTER)
+//                sleep 2000
+//                robo.keyPress(KeyEvent.VK_ENTER)
+//                sleep 2000
+            robo.keyPress(KeyEvent.VK_ENTER)
+            robo.keyRelease(KeyEvent.VK_ENTER)
+//                Actions builder = new Actions(driver)
+//                builder.sendKeys(Keys.ENTER)
+
+            sleep 2000
+            println("Thread Done")
+            sleep 2000
+
+            printerSelectionedge1++
+
+        }
+        else
+            println("Already printer connected")
+        sleep 5000
+        takeScreenshotString("After printer is connected to system")
+    }
+
+    @Step("User Test the Printer Connectivity")
+    public void printerConnectionTest(){
+
+        def s=""
+        sleep 3000
+        String ExpectedMsg = "Connectivity test successfully done"
+        boolean result = false
+        sleep 2000
+        printerMngBtnSideBar.click()
+        sleep 2000
+        writeTextToReport("User navigates to printer management tab",s)
+        takeScreenshotString("After navigating to printer management tab")
+        lnkRunTestBtnForPrinterConnectivity.click()
+        sleep 2000
+
+        WebElement printerConnectionMsg = driver.findElement(By.xpath('//p[contains(@class,\'AuthorizationModal_subTitle\')]'))
+        String ActualMsg = printerConnectionMsg.getText()
+        sleep 1000
+
+        if(ExpectedMsg.equalsIgnoreCase(ActualMsg))
+        {
+            result = true
+            writeTextToReport("Printer Connected Successfully",s)
+        }
+
+
+        Assert.assertTrue(result)
+        saveScreenshotPNG("After testing the printer connectivity")
+        sleep 25000
+        lnkOkBtnAfterConnectivityTest.click()
+
+
+    }
+
+    @Step("User will do fresh customer registration by filling all the details")
+    public void addNewCustomer(String phoneNumber,String primaryIDtype,String primaryIDnumber,String secondaryIDtype,String secondaryIDnumber){
+        sleep 3000
+//        lnkClickMoneyOrderSideBar.click()
+//        sleep 5000
+        saveScreenshotPNG("Before filling all the details on customer registration")
+        WebElement clickOnRegisterButtonNew = driver.findElement(By.xpath("//button[@id='quick-resend-sender-edit-register-btn']"))
+        JavascriptExecutor j = (JavascriptExecutor) driver
+        j.executeScript("arguments[0].click();", clickOnRegisterButtonNew)
+        sleep(2000)
+        List<WebElement> entirePageField = driver.findElements(By.xpath("//input"))
+
+        int totalRequiredFields = entirePageField.size()
+        println("Total number of fields on register new customer Page: " + totalRequiredFields)
+        String fieldName=""
+        def count = 0
+        for (WebElement ele : entirePageField) {
+            try {
+                if (driver.getCurrentUrl().contains("tablet-ui")) {
+                    fieldName = ele.getAttribute("id")
+                } else {
+                    fieldName = ele.getAttribute("automation-id")
+                }
+            } catch (Exception e) {
+                println("exception occurred while fetching the id attribute")
+            }
+            sleep(2000)
+            println(fieldName)
+            switch (fieldName) {
+                case ["input_ContactNumber-number"]:
+//                    double randomNumber = 8723455000 + generateRandomNumber(99)
+//                    String phoneNumber = randomNumber.toString()
+                    txtContactNUm.value(phoneNumber)
+                    println(txtContactNUm.getAttribute('value'))
+                    writeTextToReport("Contact Number: ", txtContactNUm.getAttribute('value'))
+                    break
+                case ["input_Name-first"]:
+                    String firstName = "ab" + RandomStringUtils.randomAlphabetic(5)
+                    txtFirstName.value(firstName)
+                    println(firstName)
+                    writeTextToReport("First name: ", firstName)
+                    break
+                case ["input_Name-last"]:
+                    String lastName = "xy" + RandomStringUtils.randomAlphabetic(5)
+                    txtLastName.value(lastName)
+                    println(lastName)
+                    writeTextToReport("Last name :", lastName)
+                    break
+                case ["input_id-dateOfBirth"]:
+                    Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+                    Map Details = jsonResult.get("customerInfo")
+                    String dob = Details.get("DOB")
+                    txtDateOfBirth.value(dob)
+                    println(dob)
+                    writeTextToReport("DOB :", dob)
+                    break
+                case ["input-null_docType"]:
+                    WebElement primaryID = driver.findElement(By.xpath("(//input[@id=\"input-null_docType\"])[1]"))
+                    WebElement secondaryID = driver.findElement(By.xpath("(//input[@id=\"input-null_docType\"])[2]"))
+//                    WebElement primaryIDField = driver.findElement(By.xpath("(//input[@id='input_PASSPORT_docNumber'])[1]"))
+//                    WebElement primaryIDField = driver.findElement(By.xpath("(//input[@id='input_PASSPORT_docNumber'])[1]"))
+//                    int randomNumber1 = 8972345500 + generateRandomNumber(99)
+//                    String passportNum = randomNumber1.toString()
+//                    int randomNumber2 = 8972345500 + generateRandomNumber(99)
+//                    String socialSecurityNum = randomNumber2.toString()
+//                    Robot robo = new Robot()
+//                    robo.keyPress(KeyEvent.VK_TAB)
+//                    robo.keyRelease(KeyEvent.VK_TAB)
+//                    robo.keyPress(KeyEvent.VK_SPACE)
+//                    robo.keyRelease(KeyEvent.VK_SPACE)
+//                    robo.keyPress(KeyEvent.VK_DOWN)
+//                    robo.keyRelease(KeyEvent.VK_DOWN)
+//                    robo.keyPress(KeyEvent.VK_DOWN)
+//                    robo.keyRelease(KeyEvent.VK_DOWN)
+//                    robo.keyPress(KeyEvent.VK_ENTER)
+//                    robo.keyRelease(KeyEvent.VK_ENTER)
+                    sleep(2000)
+                    primaryID.sendKeys(primaryIDtype+ Keys.ENTER)
+                    primaryID.sendKeys(Keys.TAB)
+                    sleep 500
+                    primaryIDField.value(primaryIDnumber)
+
+//                    robo.keyPress(KeyEvent.VK_TAB)
+//                    robo.keyRelease(KeyEvent.VK_TAB)
+//                    robo.keyPress(KeyEvent.VK_TAB)
+//                    robo.keyRelease(KeyEvent.VK_TAB)
+//                    robo.keyPress(KeyEvent.VK_SPACE)
+//                    robo.keyRelease(KeyEvent.VK_SPACE)
+//                    robo.keyPress(KeyEvent.VK_SPACE)
+//                    robo.keyRelease(KeyEvent.VK_SPACE)
+//                    robo.keyPress(KeyEvent.VK_ENTER)
+//                    robo.keyRelease(KeyEvent.VK_ENTER)
+                    sleep(2000)
+                    secondaryID.sendKeys(secondaryIDtype+ Keys.ENTER)
+                    secondaryID.sendKeys(Keys.TAB)
+                    sleep 500
+                    secondaryIDField.value(secondaryIDnumber)
+                    sleep 2000
+                    println("passportNum:" + primaryIDnumber)
+                    println("socialSecurityNum:" + secondaryIDnumber)
+                    addIssuerCountries()
+                    writeTextToReport("Passport number :",primaryIDnumber)
+                    writeTextToReport("Social Security Number", secondaryIDnumber)
+                    break
+                case ["input_Address-addressLine1"]:
+                    Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+                    Map Details = jsonResult.get("customerInfo")
+                    String address = Details.get("Address")
+                    println("input address is:" + address)
+                    Robot robo = new Robot()
+                    robo.keyPress(KeyEvent.VK_TAB)
+                    robo.keyRelease(KeyEvent.VK_TAB)
+                    robo.keyPress(KeyEvent.VK_TAB)
+                    robo.keyRelease(KeyEvent.VK_TAB)
+                    robo.keyPress(KeyEvent.VK_TAB)
+                    robo.keyRelease(KeyEvent.VK_TAB)
+                    addressline.value(address)
+                    sleep 5000
+                    robo.keyPress(KeyEvent.VK_DOWN)
+                    robo.keyRelease(KeyEvent.VK_DOWN)
+                    robo.keyPress(KeyEvent.VK_ENTER)
+                    robo.keyRelease(KeyEvent.VK_ENTER)
+                    println("address")
+                    writeTextToReport("Address selected :", address)
+                    break
+                case ["input_Address-city"]:
+                    Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+                    Map Details = jsonResult.get("customerInfo")
+                    String city = Details.get("AddressCity")
+                    inputCity.value(Keys.chord(Keys.CONTROL, "a", Keys.DELETE))
+                    sleep(500)
+                    inputCity.value(city)
+                    println(city)
+                    writeTextToReport("city name :",city)
+                    break
+                case ["input-Address-stateCode"]:
+                    Robot robo = new Robot()
+                    robo.keyPress(KeyEvent.VK_TAB)
+                    robo.keyRelease(KeyEvent.VK_TAB)
+                    sleep(1000)
+                    robo.keyPress(KeyEvent.VK_SPACE)
+                    robo.keyRelease(KeyEvent.VK_SPACE)
+                    robo.keyPress(KeyEvent.VK_ENTER)
+                    robo.keyRelease(KeyEvent.VK_ENTER)
+                    sleep(2000)
+                    writeTextToReport("State :", "Alaska")
+                case ["input_Address-postalCode"]:
+                    Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+                    Map Details = jsonResult.get("customerInfo")
+                    String zipcode = Details.get("ZipCode")
+                    txtPostalCode.value(zipcode)
+                    println(zipcode)
+                    writeTextToReport("Zip code :", zipcode)
+                    break
+                case ["agent-confirmation"]:
+                    sleep(200)
+                    try {
+                        Chbx_AgentConfirm.click()
+                    } catch (ElementNotInteractableException) {
+                        WebElement lblAgentCnfrm = driver.findElement(By.xpath("//label[@id='lbl_agent-confirmation']"))
+                        JavascriptExecutor js = (JavascriptExecutor) driver
+                        js.executeScript("arguments[0].click();", lblAgentCnfrm)
+                    }
+                    break
+            }
+        }
+        saveScreenshotPNG("After filling all the details on customer registration page")
+        clkRegister()
+
+    }
+
+    public void addIssuerCountries(){
+        WebElement primaryID_Issuer = driver.findElement(By.xpath("(//input[@id='input-PASSPORT_issuer'])[1]"))
+        Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+        Map Details = jsonResult.get("customerInfo")
+        String primaryIdIssuer = Details.get("primaryIdIssuer")
+        primaryID_Issuer.sendKeys(primaryIdIssuer)
+        primaryID_Issuer.sendKeys(Keys.ENTER)
+        writeTextToReport("Primary ID Issuer :",primaryIdIssuer)
+    }
+    @Step("User checking for the existing account and print money order")
+    public void checkForExistingUser(){
+        sleep 3000
+        saveScreenshotPNG("Before filling details on customer lookup")
+        WebElement btnLookUp = driver.findElement(By.xpath("//button[@id='customer_lookup_search']"))
+        Map jsonResult = fetchJsonFileData(System.getProperty("user.dir") + "/src/test/resources/testdata/Data/" + "RMOuserData.json");
+        Map Details = jsonResult.get("customerInfo")
+        String agentPhoneNumber = Details.get("PhoneNumLookUp")
+        String dob = Details.get("DOB")
+//        int randomNumber1 = 8972345500 + generateRandomNumber(99)
+//        String passportNum = randomNumber1.toString()
+        customerContactNumber.value(agentPhoneNumber)
+        JavascriptExecutor js = (JavascriptExecutor) driver
+        js.executeScript("arguments[0].click();", btnLookUp)
+        sleep(2000)
+        WebElement dobField = driver.findElement(By.xpath("//input[@id='input_customer-lookup-dob-textField']"))
+        dobField.sendKeys(dob)
+        js.executeScript("arguments[0].click();", btnLookUp)
+        sleep 2000
+        WebElement lookUpSelectCustomer = driver.findElement(By.xpath('(//div[@id="customer_lookup_row"])[1]'))
+        js.executeScript("arguments[0].click();", lookUpSelectCustomer)
+        sleep 10000
+//        Robot robo = new Robot()
+//        robo.keyPress(KeyEvent.VK_TAB)
+//        robo.keyRelease(KeyEvent.VK_TAB)
+//        robo.keyPress(KeyEvent.VK_TAB)
+//        robo.keyRelease(KeyEvent.VK_TAB)
+//        robo.keyPress(KeyEvent.VK_TAB)
+//        robo.keyRelease(KeyEvent.VK_TAB)
+//        robo.keyPress(KeyEvent.VK_TAB)
+//        robo.keyRelease(KeyEvent.VK_TAB)
+//        robo.keyPress(KeyEvent.VK_TAB)
+//        robo.keyRelease(KeyEvent.VK_TAB)
+//        robo.keyPress(KeyEvent.VK_TAB)
+//        robo.keyRelease(KeyEvent.VK_TAB)
+//        robo.keyPress(KeyEvent.VK_TAB)
+//        robo.keyRelease(KeyEvent.VK_TAB)
+//        robo.keyPress(KeyEvent.VK_TAB)
+//        robo.keyRelease(KeyEvent.VK_TAB)
+//        robo.keyPress(KeyEvent.VK_SPACE)
+//        robo.keyRelease(KeyEvent.VK_SPACE)
+//        robo.keyPress(KeyEvent.VK_DOWN)
+//        robo.keyRelease(KeyEvent.VK_DOWN)
+//        robo.keyPress(KeyEvent.VK_ENTER)
+//        robo.keyRelease(KeyEvent.VK_ENTER)
+//        sleep(2000)
+//
+//        primaryIDField.value(passportNum)
+//        addIssuerCountries()
+        WebElement btnContinueOnLookUp = driver.findElement(By.xpath("//a[@id='quick-resend-sender-edit-saveChanges-btn_anchor']"))
+        WebElement chkBoxOnLookUp = driver.findElement(By.xpath("//input[@id='agent-confirmation']"))
+        js.executeScript("arguments[0].click();", chkBoxOnLookUp)
+        saveScreenshotPNG("After filling all details on customer lookup")
+        js.executeScript("arguments[0].click();", btnContinueOnLookUp)
+        writeTextToReport("Phone number for lookup :", agentPhoneNumber)
+        writeTextToReport("DOB :", dob)
+        sleep 2000
+    }
+    @Step("User will click on register button")
+    public void clkRegister(){
+        WebElement btnRegister = driver.findElement(By.xpath("//button[@id='quick-resend-sender-edit-saveChanges-btn']"))
+        JavascriptExecutor js = (JavascriptExecutor) driver
+        js.executeScript("arguments[0].click();", btnRegister)
+    }
+
+    @Step("User will enable Mock Printing")
+    public void enableMockPrinting(){
+
+
+        def a=""
+        sleep 2000
+        printerMngBtnSideBar.click()
+        sleep 2000
+        Robot robo = new Robot()
+        robo.keyPress(KeyEvent.VK_ENTER)
+        robo.keyRelease(KeyEvent.VK_ENTER)
+        sleep 2000
+        printerToggleEnableMockPrinting.click()
+        sleep 1000
+        writeTextToReport("Mock Printing Enabled", a)
+        takeScreenshotString("After Enabling Mock Printing")
+        sleep 5000
+        waitFor {lnkClickMoneyOrderSideBar.displayed}
+        lnkClickMoneyOrderSideBar.click()
+        sleep 8000
+
+        WebElement MOLoadedInVault = driver.findElement(By.xpath('//span[@class=\'font-ls-01\']/div'))
+        String NoOfMOLoadedInVault = MOLoadedInVault.getText()
+        writeTextToReport("No. of MO Loaded In Vault: ",NoOfMOLoadedInVault)
+
+    }
+
+}
