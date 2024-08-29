@@ -1,0 +1,42 @@
+1. "Launch RMO using below URL:URL: https://wuposclqa1.qawesternunion.com/tablet-ui/home"
+Enter correct username and password and click on login button
+Click on Money Order tile
+Verify user is able add amount to 1st or 2nd and 3rd money order
+Verify user is able to delete 3rd money order and proceed
+Verify MO is printed
+
+
+
+2."Launch RMO using below URL:URL: https://wuposclqa1.qawesternunion.com/tablet-ui/home"
+Enter correct username and password and click on login button
+Click on Money Order tile
+Verify user is able to add upto 20 money orders at a time
+Verify MO series number are correct
+Verify no fee and edit fee options are available for all 20 orders
+Verify user is unable to add more than 20 money orders at a time
+"Verify user error message displayed as below:
+""You have reached the maximum limit of 20 money orders."""
+Verify Money order summary displays 20 money orders with correct amount entered
+Verify Serial number displayed for 20 money orders
+Verify MO is printed
+
+3."Launch RMO using below URL:URL: https://wuposclqa1.qawesternunion.com/tablet-ui/home"
+Enter correct username and password and click on login button
+Click on Money Order tile
+Verify if limit amount is set as 2500 then MO amont entered above this limit is splitted into two orders automatically
+Enter MO value as 2600
+
+
+4. "Launch RMO using below URL:URL: https://wuposclqa1.qawesternunion.com/tablet-ui/home"
+Enter correct username and password and click on login button
+Click on Money Order tile
+Verify if limit amount is set as 2500.01 then MO amount entered above this limit is splitted into two orders automatically
+Enter MO value as 2600
+
+
+5. "Launch RMO using below URL:URL: https://wuposclqa1.qawesternunion.com/tablet-ui/home"
+Enter correct username and password and click on login button
+Click on Money Order tile
+Verify if limit amount is set as 2999.99 then MO amount entered above this limit is splitted into two orders automatically
+Enter MO value as 2600
+Verify Compliance is not triggered for this transaction
