@@ -1,0 +1,72 @@
+package spec.RMO_Automation_Regression
+
+import geb.spock.GebReportingSpec
+import pageobjects.BaseClass
+import pageobjects.HomePage
+import pageobjects.LoginPage
+import pageobjects.MoneyOrderPage
+import spock.lang.Shared
+import spock.lang.Unroll
+
+class TC07_RMO_Verfiy_RMO_Transaction_Page extends GebReportingSpec {
+    @Shared
+    def senderCountryCodeArray
+
+    void setupSpec() {
+        senderCountryCodeArray = System.getProperty("senderCountryCode").split(",")
+    }
+
+    def senderCountryCode = "rmous"
+    def sendAmount = "100"
+    def sendAmount2="100"
+    def sendAmount3 ="100"
+    def url = System.getProperty("geb.build.baseUrl")
+    def userPassword = System.getProperty("userPassword")
+
+    @Unroll
+    def "Verify the Transaction For print Money Order "() {
+        given: "User navigates to login page and login using valid credentials"
+        at BaseClass
+        page.clickOnCertificate(url)
+        at LoginPage
+        page.doLogin(userPassword, senderCountryCode, "", "", url, "")
+        and: "User lands on Home page"
+        waitFor { at HomePage }
+        and: "User read message pop up"
+        page.readMsgPopUp()
+        when: "User clicks on Money Order link and navigates to Money Order page "
+        page.clickMoneyOrderLink()
+
+        then: "User click Ok Button on time zone Pop Up"
+        page.acceptTimePopUp()
+
+        then: "User lands into Money Order page"
+        waitFor { at MoneyOrderPage }
+
+        then:"User selects the printer from printer popUp"
+//        page.selectPrinterFromPopUp()
+
+        then:"User test enable mock printing"
+        page.enableMockPrinting()
+
+        when: "Verify user is able add amount to 1st or 2nd and 3rd money order"
+        page.selectMoneyOrderAmount(sendAmount )
+        then: "User Enters the amount and print the MO2"
+        page.selectMoneyOrderAmount(sendAmount2 )
+        then: "User Enters the amount and print the MO3"
+        page.selectMoneyOrderAmount(sendAmount3 )
+
+        when: " User Delete the 3rd Money Order and proceed "
+        page.deletethirdMO()
+
+
+
+
+        cleanup:
+        page.clearSessionStorageAndCookies()
+
+    }
+
+
+}
+
