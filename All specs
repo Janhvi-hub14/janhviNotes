@@ -1,0 +1,60 @@
+3. package spec.RMO_Automation_Regression
+
+import geb.spock.GebReportingSpec
+import pageobjects.BaseClass
+import pageobjects.HomePage
+import pageobjects.LoginPage
+import pageobjects.MoneyOrderPage
+import spock.lang.Shared
+import spock.lang.Unroll
+
+class TC09_RMO_Verify_MO_Amount_Split_Above_2500 extends GebReportingSpec {
+
+    @Shared
+    def senderCountryCodeArray
+
+    def senderCountryCode = "rmous"
+    def sendAmount = "2600"
+    def url = System.getProperty("geb.build.baseUrl")
+    def userPassword = System.getProperty("userPassword")
+
+    void setupSpec() {
+        senderCountryCodeArray = System.getProperty("senderCountryCode").split(",")
+    }
+
+    @Unroll
+    def "Verify MO amount is split into two orders if limit is 2500"() {
+        given: "User navigates to login page and logs in using valid credentials"
+        to LoginPage
+        at LoginPage
+        page.doLogin(userPassword, senderCountryCode, "", "", url, "")
+        
+        and: "User lands on the Home page and reads any pop-up messages"
+        at HomePage
+        page.readMsgPopUp()
+
+        when: "User clicks on the Money Order link and navigates to Money Order page"
+        page.clickMoneyOrderLink()
+
+        then: "User accepts the time zone pop-up"
+        page.acceptTimePopUp()
+
+        and: "User lands on Money Order page"
+        at MoneyOrderPage
+
+        and: "User enables mock printing"
+        page.enableMockPrinting()
+
+        when: "User enters an MO amount of 2600"
+        page.selectMoneyOrderAmount(sendAmount)
+
+        then: "Verify the MO is split into two orders"
+        page.verifyMOSplitIntoTwoOrders()
+
+        and: "MO is printed"
+        page.verifyMOIsPrinted()
+
+        cleanup:
+        page.clearSessionStorageAndCookies()
+    }
+}
